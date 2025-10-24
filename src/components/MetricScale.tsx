@@ -1,0 +1,77 @@
+import { useEffect, useState } from "react";
+
+interface MetricScaleProps {
+  label: string;
+  value: number;
+  industryAvg: number;
+  unit?: string;
+}
+
+export const MetricScale = ({ label, value, industryAvg, unit = "" }: MetricScaleProps) => {
+  const [animatedValue, setAnimatedValue] = useState(0);
+  
+  // Calculate percentage position (0-100)
+  // We'll use a range where industry average is at 50%
+  const range = Math.max(Math.abs(value - industryAvg) * 2, industryAvg * 2);
+  const min = Math.max(0, industryAvg - range / 2);
+  const max = industryAvg + range / 2;
+  
+  const stockPosition = ((value - min) / (max - min)) * 100;
+  const industryPosition = ((industryAvg - min) / (max - min)) * 100;
+  
+  const isAboveAverage = value > industryAvg;
+  const difference = ((value - industryAvg) / industryAvg) * 100;
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAnimatedValue(stockPosition);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [stockPosition]);
+
+  return (
+    <div className="space-y-4 p-6 rounded-xl bg-gradient-surface border border-glass backdrop-blur-sm">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-foreground">{label}</h3>
+        <div className="flex items-baseline gap-2">
+          <span className="text-2xl font-bold text-foreground">
+            {value.toFixed(2)}{unit}
+          </span>
+          <span className={`text-sm font-medium ${isAboveAverage ? 'text-positive' : 'text-destructive'}`}>
+            {isAboveAverage ? '+' : ''}{difference.toFixed(1)}%
+          </span>
+        </div>
+      </div>
+      
+      <div className="space-y-2">
+        <div className="relative h-2 bg-muted rounded-full overflow-hidden">
+          {/* Industry average marker */}
+          <div 
+            className="absolute top-0 bottom-0 w-1 bg-muted-foreground/50"
+            style={{ left: `${industryPosition}%` }}
+          />
+          
+          {/* Stock value bar */}
+          <div 
+            className={`h-full rounded-full transition-all duration-1000 ease-out ${
+              isAboveAverage ? 'bg-gradient-to-r from-primary to-accent' : 'bg-gradient-to-r from-destructive to-orange-500'
+            }`}
+            style={{ width: `${animatedValue}%` }}
+          />
+        </div>
+        
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-muted-foreground">
+            Min: {min.toFixed(2)}{unit}
+          </span>
+          <span className="text-muted-foreground font-medium">
+            Industry Avg: {industryAvg.toFixed(2)}{unit}
+          </span>
+          <span className="text-muted-foreground">
+            Max: {max.toFixed(2)}{unit}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
