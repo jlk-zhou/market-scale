@@ -14,6 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
+        georgia: ['Georgia', 'Garamond', 'serif'],
         inter: ['Inter', 'sans-serif'],
       },
       colors: {
@@ -59,11 +60,9 @@ export default {
         'gradient-primary': 'var(--gradient-primary)',
         'gradient-surface': 'var(--gradient-surface)',
       },
-      backgroundColor: {
-        'glass': 'var(--glass-bg)',
-      },
-      borderColor: {
-        'glass': 'var(--glass-border)',
+      colors: {
+        'highlight-yellow': 'var(--highlight-yellow)',
+        'underline-accent': 'var(--underline-accent)',
       },
       borderRadius: {
         lg: "var(--radius)",

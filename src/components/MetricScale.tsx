@@ -30,7 +30,7 @@ export const MetricScale = ({ label, value, industryAvg, unit = "" }: MetricScal
   }, [stockPosition]);
 
   return (
-    <div className="space-y-4 p-6 rounded-xl bg-gradient-surface border border-glass backdrop-blur-sm">
+    <div className="space-y-4 p-6 rounded-xl bg-card border border-border shadow-sm">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-foreground">{label}</h3>
         <div className="flex items-baseline gap-2">
@@ -44,17 +44,17 @@ export const MetricScale = ({ label, value, industryAvg, unit = "" }: MetricScal
       </div>
       
       <div className="space-y-2">
-        <div className="relative h-2 bg-muted rounded-full overflow-hidden">
+        <div className="relative h-3 bg-muted rounded-sm overflow-hidden">
           {/* Industry average marker */}
           <div 
-            className="absolute top-0 bottom-0 w-1 bg-muted-foreground/50"
+            className="absolute top-0 bottom-0 w-0.5 bg-foreground/60 z-10"
             style={{ left: `${industryPosition}%` }}
           />
           
           {/* Stock value bar */}
           <div 
-            className={`h-full rounded-full transition-all duration-1000 ease-out ${
-              isAboveAverage ? 'bg-gradient-to-r from-primary to-accent' : 'bg-gradient-to-r from-destructive to-orange-500'
+            className={`h-full transition-all duration-1000 ease-out ${
+              isAboveAverage ? 'bg-positive' : 'bg-destructive'
             }`}
             style={{ width: `${animatedValue}%` }}
           />
@@ -64,7 +64,7 @@ export const MetricScale = ({ label, value, industryAvg, unit = "" }: MetricScal
           <span className="text-muted-foreground">
             Min: {min.toFixed(2)}{unit}
           </span>
-          <span className="text-muted-foreground font-medium">
+          <span className="text-muted-foreground font-medium handwritten-highlight">
             Industry Avg: {industryAvg.toFixed(2)}{unit}
           </span>
           <span className="text-muted-foreground">

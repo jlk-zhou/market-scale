@@ -27,13 +27,13 @@ export const StockSearch = ({ onSearch }: StockSearchProps) => {
             placeholder="Enter stock ticker (e.g., AAPL)"
             value={ticker}
             onChange={(e) => setTicker(e.target.value)}
-            className="pl-12 h-14 text-lg bg-card border-glass backdrop-blur-sm"
+            className="pl-12 h-14 text-lg bg-card border-border shadow-sm"
           />
         </div>
         <Button 
           type="submit" 
           size="lg"
-          className="h-14 px-8 bg-gradient-primary hover:opacity-90 transition-opacity"
+          className="h-14 px-8 bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
         >
           Analyze
         </Button>
