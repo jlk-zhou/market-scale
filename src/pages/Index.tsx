@@ -68,7 +68,7 @@ const Index = () => {
   return <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-4 bg-neutral-50">
           <a href="/" className="inline-block hover:opacity-70 transition-opacity">
             <BarChart3 className="h-8 w-8 text-primary" />
           </a>
