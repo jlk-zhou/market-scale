@@ -48,7 +48,7 @@ export const MetricScale = ({ label, value, industryAvg, unit = "" }: MetricScal
           {/* Industry average marker */}
           <div 
             className="absolute top-0 bottom-0 w-0.5 bg-foreground/60 z-10"
-            style={{ left: `${industryPosition}%` }}
+            style={{ left: `50%` }}
           />
           
           {/* Stock value bar */}
