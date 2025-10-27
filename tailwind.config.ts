@@ -60,7 +60,7 @@ export default {
         'gradient-primary': 'var(--gradient-primary)',
         'gradient-surface': 'var(--gradient-surface)',
       },
-      colors: {
+      handwriteColors: {
         'highlight-yellow': 'var(--highlight-yellow)',
         'underline-accent': 'var(--underline-accent)',
       },
