@@ -67,8 +67,12 @@ const Index = () => {
   };
   return <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-glass backdrop-blur-sm bg-glass/50 sticky top-0 z-50">
-        
+      <header className="border-b border-border bg-card sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4 bg-neutral-50">
+          <a href="/" className="inline-block hover:opacity-70 transition-opacity">
+            <BarChart3 className="h-8 w-8 text-primary" />
+          </a>
+        </div>
       </header>
 
       {/* Main Content */}
@@ -78,10 +82,10 @@ const Index = () => {
           {!stockData && <div className="text-center space-y-6 py-12">
               <div className="space-y-3">
                 <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-                  Analyze Stock Fundamentals
+                  <span className="handwritten-highlight">Analyze</span> Stock Fundamentals
                 </h2>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Compare key financial metrics against industry averages to make informed investment decisions
+                  Compare key financial metrics against industry averages to make <span className="handwritten-underline">informed investment decisions</span>
                 </p>
               </div>
             </div>}
@@ -94,19 +98,19 @@ const Index = () => {
 
           {/* Features Grid */}
           {!stockData && <div className="grid md:grid-cols-3 gap-6 pt-12">
-              <div className="p-6 rounded-xl bg-gradient-surface border border-glass backdrop-blur-sm">
+              <div className="p-6 rounded-xl bg-card border border-border shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="text-lg font-semibold text-foreground mb-2">Current Ratio</h3>
                 <p className="text-sm text-muted-foreground">
                   Measure a company's ability to pay short-term obligations
                 </p>
               </div>
-              <div className="p-6 rounded-xl bg-gradient-surface border border-glass backdrop-blur-sm">
+              <div className="p-6 rounded-xl bg-card border border-border shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="text-lg font-semibold text-foreground mb-2">P/E Ratio</h3>
                 <p className="text-sm text-muted-foreground">
                   Evaluate stock valuation relative to earnings
                 </p>
               </div>
-              <div className="p-6 rounded-xl bg-gradient-surface border border-glass backdrop-blur-sm">
+              <div className="p-6 rounded-xl bg-card border border-border shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="text-lg font-semibold text-foreground mb-2">Return on Equity</h3>
                 <p className="text-sm text-muted-foreground">
                   Assess profitability and efficiency of equity investments
