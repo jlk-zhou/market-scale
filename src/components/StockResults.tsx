@@ -52,6 +52,7 @@ export const StockResults = ({ data }: StockResultsProps) => {
           label="Price-to-Earnings Ratio (P/E)"
           value={data.peRatio}
           industryAvg={data.industryAvg.peRatio}
+          higherIsBetter={false}
         />
         
         <MetricScale

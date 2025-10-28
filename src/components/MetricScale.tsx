@@ -5,9 +5,10 @@ interface MetricScaleProps {
   value: number;
   industryAvg: number;
   unit?: string;
+  higherIsBetter?: boolean;
 }
 
-export const MetricScale = ({ label, value, industryAvg, unit = "" }: MetricScaleProps) => {
+export const MetricScale = ({ label, value, industryAvg, unit = "", higherIsBetter = true }: MetricScaleProps) => {
   const [animatedValue, setAnimatedValue] = useState(0);
   
   // Calculate percentage position (0-100)
@@ -17,10 +18,15 @@ export const MetricScale = ({ label, value, industryAvg, unit = "" }: MetricScal
   const max = industryAvg + range / 2;
   
   const stockPosition = ((value - min) / (max - min)) * 100;
-  const industryPosition = ((industryAvg - min) / (max - min)) * 100;
   
   const isAboveAverage = value > industryAvg;
   const difference = ((value - industryAvg) / industryAvg) * 100;
+
+  // Determine whether the metric should be considered "positive".
+  // By default (higherIsBetter = true) higher-than-average is positive.
+  // For metrics like P/E where higher is worse, pass higherIsBetter={false}
+  // from the parent so the colors are inverted.
+  const isPositive = higherIsBetter ? isAboveAverage : !isAboveAverage;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -37,7 +43,7 @@ export const MetricScale = ({ label, value, industryAvg, unit = "" }: MetricScal
           <span className="text-2xl font-bold text-foreground">
             {value.toFixed(2)}{unit}
           </span>
-          <span className={`text-sm font-medium ${isAboveAverage ? 'text-positive' : 'text-destructive'}`}>
+          <span className={`text-sm font-medium ${isPositive ? 'text-positive' : 'text-destructive'}`}>
             {isAboveAverage ? '+' : ''}{difference.toFixed(1)}%
           </span>
         </div>
@@ -54,7 +60,7 @@ export const MetricScale = ({ label, value, industryAvg, unit = "" }: MetricScal
           {/* Stock value bar */}
           <div 
             className={`h-full transition-all duration-1000 ease-out ${
-              isAboveAverage ? 'bg-positive' : 'bg-destructive'
+              isPositive ? 'bg-positive' : 'bg-destructive'
             }`}
             style={{ width: `${animatedValue}%` }}
           />
