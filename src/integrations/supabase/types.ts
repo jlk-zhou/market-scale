@@ -14,7 +14,105 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      sectors: {
+        Row: {
+          avg_current_ratio: number | null
+          avg_pe: number | null
+          avg_roe: number | null
+          id: string
+          sector_name: string
+        }
+        Insert: {
+          avg_current_ratio?: number | null
+          avg_pe?: number | null
+          avg_roe?: number | null
+          id?: string
+          sector_name: string
+        }
+        Update: {
+          avg_current_ratio?: number | null
+          avg_pe?: number | null
+          avg_roe?: number | null
+          id?: string
+          sector_name?: string
+        }
+        Relationships: []
+      }
+      stocks: {
+        Row: {
+          current_assets: number
+          current_liabilities: number
+          current_ratio: number | null
+          eps: number | null
+          id: string
+          last_price: number
+          name: string
+          net_income: number | null
+          pe_ratio: number | null
+          roe: number | null
+          sector: string | null
+          ticker: string
+          total_equity: number | null
+        }
+        Insert: {
+          current_assets: number
+          current_liabilities: number
+          current_ratio?: number | null
+          eps?: number | null
+          id: string
+          last_price: number
+          name: string
+          net_income?: number | null
+          pe_ratio?: number | null
+          roe?: number | null
+          sector?: string | null
+          ticker: string
+          total_equity?: number | null
+        }
+        Update: {
+          current_assets?: number
+          current_liabilities?: number
+          current_ratio?: number | null
+          eps?: number | null
+          id?: string
+          last_price?: number
+          name?: string
+          net_income?: number | null
+          pe_ratio?: number | null
+          roe?: number | null
+          sector?: string | null
+          ticker?: string
+          total_equity?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
