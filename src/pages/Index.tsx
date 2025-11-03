@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StockSearch } from "@/components/StockSearch";
 import { StockResults } from "@/components/StockResults";
+import { UserMenu } from "@/components/UserMenu";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 import { BarChart3 } from "lucide-react";
+import type { User, Session } from "@supabase/supabase-js";
 
 // Dummy data for demonstration
 const getDummyStockData = (ticker: string) => {
@@ -58,6 +63,28 @@ const getDummyStockData = (ticker: string) => {
 };
 const Index = () => {
   const [stockData, setStockData] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+      }
+    );
+
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   const handleSearch = (ticker: string) => {
     const data = getDummyStockData(ticker);
     setStockData({
@@ -69,9 +96,20 @@ const Index = () => {
       {/* Header */}
       <header className="border-b border-border bg-card sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 bg-neutral-50">
-          <a href="/" className="inline-block hover:opacity-70 transition-opacity">
-            <BarChart3 className="h-8 w-8 text-primary" />
-          </a>
+          <div className="flex items-center justify-between">
+            <a href="/" className="inline-block hover:opacity-70 transition-opacity">
+              <BarChart3 className="h-8 w-8 text-primary" />
+            </a>
+            <div>
+              {user ? (
+                <UserMenu user={user} />
+              ) : (
+                <Button onClick={() => navigate("/auth")} variant="default">
+                  Log In
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
       </header>
 
