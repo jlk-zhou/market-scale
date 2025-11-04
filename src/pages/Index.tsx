@@ -6,65 +6,13 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { BarChart3 } from "lucide-react";
+import { toast } from "sonner";
 import type { User, Session } from "@supabase/supabase-js";
-
-// Dummy data for demonstration
-const getDummyStockData = (ticker: string) => {
-  const companies: Record<string, any> = {
-    AAPL: {
-      companyName: "Apple Inc.",
-      industry: "Technology",
-      currentRatio: 1.07,
-      peRatio: 29.5,
-      roe: 147.4,
-      industryAvg: {
-        currentRatio: 1.5,
-        peRatio: 25.3,
-        roe: 18.2
-      }
-    },
-    MSFT: {
-      companyName: "Microsoft Corporation",
-      industry: "Technology",
-      currentRatio: 1.78,
-      peRatio: 35.2,
-      roe: 43.5,
-      industryAvg: {
-        currentRatio: 1.5,
-        peRatio: 25.3,
-        roe: 18.2
-      }
-    },
-    TSLA: {
-      companyName: "Tesla, Inc.",
-      industry: "Automotive",
-      currentRatio: 1.52,
-      peRatio: 71.3,
-      roe: 28.1,
-      industryAvg: {
-        currentRatio: 1.2,
-        peRatio: 12.5,
-        roe: 15.4
-      }
-    }
-  };
-  return companies[ticker] || {
-    companyName: `${ticker} Inc.`,
-    industry: "Technology",
-    currentRatio: 1.45,
-    peRatio: 22.8,
-    roe: 16.7,
-    industryAvg: {
-      currentRatio: 1.5,
-      peRatio: 25.3,
-      roe: 18.2
-    }
-  };
-};
 const Index = () => {
   const [stockData, setStockData] = useState<any>(null);
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,12 +33,54 @@ const Index = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const handleSearch = (ticker: string) => {
-    const data = getDummyStockData(ticker);
-    setStockData({
-      ticker,
-      ...data
-    });
+  const handleSearch = async (ticker: string) => {
+    setIsLoading(true);
+    try {
+      // Fetch stock data
+      const { data: stockData, error: stockError } = await supabase
+        .from('stocks')
+        .select('*')
+        .eq('ticker', ticker)
+        .maybeSingle();
+
+      if (stockError) throw stockError;
+
+      if (!stockData) {
+        toast.error(`Stock ticker "${ticker}" is invalid or currently unsupported.`);
+        setStockData(null);
+        return;
+      }
+
+      // Fetch sector averages
+      const { data: sectorData, error: sectorError } = await supabase
+        .from('sectors')
+        .select('*')
+        .eq('sector_name', stockData.sector)
+        .maybeSingle();
+
+      if (sectorError) throw sectorError;
+
+      // Format data for display
+      setStockData({
+        ticker: stockData.ticker,
+        companyName: stockData.name,
+        industry: stockData.sector || 'N/A',
+        currentRatio: stockData.current_ratio || 0,
+        peRatio: stockData.pe_ratio || 0,
+        roe: stockData.roe || 0,
+        industryAvg: {
+          currentRatio: sectorData?.avg_current_ratio || 0,
+          peRatio: sectorData?.avg_pe || 0,
+          roe: sectorData?.avg_roe || 0
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching stock data:', error);
+      toast.error('An error occurred while fetching stock data. Please try again.');
+      setStockData(null);
+    } finally {
+      setIsLoading(false);
+    }
   };
   return <div className="min-h-screen bg-background">
       {/* Header */}
